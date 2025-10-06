@@ -45,12 +45,12 @@ const Index = () => {
         </h1>
 
         {/* Definition */}
-        <p className="font-body text-[clamp(1rem,3vw,1.5rem)] text-center text-secondary uppercase tracking-tight mb-12">
+        <p className="font-body text-[clamp(1rem,3vw,1.5rem)] text-center text-secondary uppercase tracking-tight mb-8">
           Dar existencia a algo que no existía.
         </p>
 
         {/* Action Words */}
-        <div className="flex flex-col gap-0 w-full mb-12">
+        <div className="flex flex-col gap-0 w-full mb-8">
           <div className="font-display text-[clamp(2.2rem,7vw,4rem)] text-secondary text-center text-shadow-3d-secondary tracking-tight">
             • EXPERIMENTAR •
           </div>
@@ -63,7 +63,7 @@ const Index = () => {
         </div>
 
         {/* Description */}
-        <p className="font-body text-[clamp(1.1rem,3vw,1.6rem)] text-center text-secondary leading-tight mb-12 max-w-[700px]">
+        <p className="font-body text-[clamp(1.1rem,3vw,1.6rem)] text-center text-secondary leading-tight mb-8 max-w-[700px]">
           BUSCAMOS CREADORES EN ZAMORA PARA FUNDAR UNA EMPRESA TECNOLÓGICA JUNTOS.
           <br />
           NO TENGO NI IDEA QUÉ.
@@ -92,7 +92,7 @@ const Index = () => {
         </form>
 
         {/* Footer */}
-        <div className="text-center mt-auto pt-20 font-body text-[clamp(1rem,2.5vw,1.3rem)] text-secondary uppercase">
+        <div className="text-center mt-auto pt-16 font-body text-[clamp(1rem,2.5vw,1.3rem)] text-secondary uppercase">
           Una iniciativa de Saar Byrne
           <br />
           <a href="https://www.saarbyrne.com" target="_blank" rel="noopener noreferrer" className="text-[#0000FF] hover:underline">
