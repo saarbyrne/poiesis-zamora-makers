@@ -50,7 +50,7 @@ const Index = () => {
         </p>
 
         {/* Action Words */}
-        <div className="flex flex-col gap-4 w-full mb-12">
+        <div className="flex flex-col gap-0 w-full mb-12">
           <div className="font-display text-[clamp(2.2rem,7vw,4rem)] text-secondary text-center text-shadow-3d-secondary tracking-tight">
             • EXPERIMENTAR •
           </div>
