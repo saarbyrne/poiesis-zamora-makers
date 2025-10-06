@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
 import { toast } from "sonner";
-
 const Index = () => {
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!email && !whatsapp) {
       toast.error("Por favor, ingresa tu email o WhatsApp");
       return;
@@ -22,7 +19,6 @@ const Index = () => {
 
     // Create email body
     let emailBody = "Nueva persona interesada en Poiesis:%0D%0A%0D%0A";
-
     if (email) {
       emailBody += `Email: ${encodeURIComponent(email)}%0D%0A`;
     }
@@ -39,12 +35,9 @@ const Index = () => {
     // Clear form
     setEmail("");
     setWhatsapp("");
-
     toast.success("¡Gracias por tu interés!");
   };
-
-  return (
-    <div className="min-h-screen flex flex-col px-5 py-10 md:px-10 md:py-20">
+  return <div className="min-h-screen flex flex-col px-5 py-10 md:px-10 md:py-20">
       <div className="max-w-[720px] mx-auto w-full flex flex-col items-center">
         {/* Logo */}
         <h1 className="font-display text-[clamp(3rem,12vw,7rem)] text-primary text-center leading-[0.9] mb-5 text-shadow-3d-primary tracking-tight">
@@ -79,16 +72,10 @@ const Index = () => {
         </p>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="w-full max-w-[560px] bg-card rounded-[20px] p-8 md:p-10 shadow-card">
+        <form onSubmit={handleSubmit} className="w-full max-w-[560px] rounded-[20px] p-8 md:p-10 shadow-card bg-black/[0.04]">
           {/* Email Input */}
           <div className="relative mb-6">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="EMAIL"
-              className="w-full py-4 px-5 pr-12 text-lg font-body font-medium border-[3px] border-input rounded-full bg-card focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-muted-foreground placeholder:font-normal"
-            />
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="EMAIL" className="w-full py-4 px-5 pr-12 text-lg font-body font-medium border-[3px] border-input rounded-full bg-card focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-muted-foreground placeholder:font-normal" />
             <Send className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
           </div>
 
@@ -99,21 +86,12 @@ const Index = () => {
 
           {/* WhatsApp Input */}
           <div className="relative mb-6">
-            <input
-              type="tel"
-              value={whatsapp}
-              onChange={(e) => setWhatsapp(e.target.value)}
-              placeholder="WHATSAPP"
-              className="w-full py-4 px-5 pr-12 text-lg font-body font-medium border-[3px] border-input rounded-full bg-card focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-muted-foreground placeholder:font-normal"
-            />
+            <input type="tel" value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="WHATSAPP" className="w-full py-4 px-5 pr-12 text-lg font-body font-medium border-[3px] border-input rounded-full bg-card focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-muted-foreground placeholder:font-normal" />
             <Send className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full py-5 text-xl font-black font-body uppercase bg-primary text-primary-foreground rounded-full shadow-button hover:bg-primary-dark hover:-translate-y-0.5 hover:shadow-button-hover active:translate-y-0 transition-all mt-2"
-          >
+          <button type="submit" className="w-full py-5 text-xl font-black font-body uppercase bg-primary text-primary-foreground rounded-full shadow-button hover:bg-primary-dark hover:-translate-y-0.5 hover:shadow-button-hover active:translate-y-0 transition-all mt-2">
             Enviar →
           </button>
         </form>
@@ -121,27 +99,15 @@ const Index = () => {
         {/* Footer */}
         <div className="text-center mt-16 font-body text-base text-secondary">
           Una iniciativa de{" "}
-          <a
-            href="https://www.saarbyrne.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary font-bold hover:underline uppercase"
-          >
+          <a href="https://www.saarbyrne.com" target="_blank" rel="noopener noreferrer" className="text-primary font-bold hover:underline uppercase">
             Saar Byrne
           </a>
           <br />
-          <a
-            href="https://www.saarbyrne.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary font-bold hover:underline uppercase"
-          >
+          <a href="https://www.saarbyrne.com" target="_blank" rel="noopener noreferrer" className="text-primary font-bold hover:underline uppercase">
             www.saarbyrne.com
           </a>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
