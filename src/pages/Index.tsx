@@ -1,41 +1,82 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+// Validation schemas
+const emailSchema = z.string()
+  .trim()
+  .email({ message: "Por favor, ingresa un email válido" })
+  .max(255, { message: "El email es demasiado largo" });
+
+const phoneSchema = z.string()
+  .trim()
+  .min(8, { message: "El número debe tener al menos 8 dígitos" })
+  .max(20, { message: "El número es demasiado largo" })
+  .regex(/^[\d\s\+\-\(\)]+$/, { message: "Por favor, ingresa un número de teléfono válido" });
+
 const Index = () => {
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email && !whatsapp) {
+    
+    // Check that at least one field is filled
+    if (!email.trim() && !whatsapp.trim()) {
       toast.error("Por favor, ingresa tu email o WhatsApp");
       return;
     }
 
-    // Validate email format if provided
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      toast.error("Por favor, ingresa un email válido");
-      return;
+    setIsSubmitting(true);
+
+    try {
+      // Validate email if provided
+      if (email.trim()) {
+        const emailResult = emailSchema.safeParse(email);
+        if (!emailResult.success) {
+          toast.error(emailResult.error.errors[0].message);
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Validate WhatsApp if provided
+      if (whatsapp.trim()) {
+        const phoneResult = phoneSchema.safeParse(whatsapp);
+        if (!phoneResult.success) {
+          toast.error(phoneResult.error.errors[0].message);
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Create email body with validated data
+      let emailBody = "Nueva persona interesada en Poiesis:%0D%0A%0D%0A";
+      if (email.trim()) {
+        emailBody += `Email: ${encodeURIComponent(email.trim())}%0D%0A`;
+      }
+      if (whatsapp.trim()) {
+        emailBody += `WhatsApp: ${encodeURIComponent(whatsapp.trim())}%0D%0A`;
+      }
+
+      // Create mailto link
+      const mailtoLink = `mailto:byrne.saar@gmail.com?subject=Poiesis - Nuevo Interesado&body=${emailBody}`;
+
+      // Open email client
+      window.location.href = mailtoLink;
+
+      // Clear form and show success
+      setEmail("");
+      setWhatsapp("");
+      toast.success("¡Gracias por tu interés! Se abrirá tu cliente de email.");
+      
+    } catch (error) {
+      toast.error("Ocurrió un error. Por favor, intenta de nuevo.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // Create email body
-    let emailBody = "Nueva persona interesada en Poiesis:%0D%0A%0D%0A";
-    if (email) {
-      emailBody += `Email: ${encodeURIComponent(email)}%0D%0A`;
-    }
-    if (whatsapp) {
-      emailBody += `WhatsApp: ${encodeURIComponent(whatsapp)}%0D%0A`;
-    }
-
-    // Create mailto link
-    const mailtoLink = `mailto:byrne.saar@gmail.com?subject=Poiesis - Nuevo Interesado&body=${emailBody}`;
-
-    // Open email client
-    window.location.href = mailtoLink;
-
-    // Clear form
-    setEmail("");
-    setWhatsapp("");
-    toast.success("¡Gracias por tu interés!");
   };
   return <div className="min-h-screen flex flex-col px-5 py-10 md:px-10 md:py-20">
       <div className="max-w-[720px] mx-auto w-full flex flex-col items-center">
@@ -75,7 +116,15 @@ const Index = () => {
         <form onSubmit={handleSubmit} className="w-full max-w-[560px] flex flex-col items-center gap-6">
           {/* Email Input */}
           <div className="relative w-full">
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="EMAIL" className="w-full py-4 px-5 pr-12 text-lg font-body border-[3px] border-secondary rounded-full bg-card focus:outline-none focus:border-primary transition-all placeholder:text-secondary placeholder:uppercase" />
+            <input 
+              type="email" 
+              value={email} 
+              onChange={e => setEmail(e.target.value)} 
+              placeholder="EMAIL" 
+              maxLength={255}
+              disabled={isSubmitting}
+              className="w-full py-4 px-5 pr-12 text-lg font-body border-[3px] border-secondary rounded-full bg-card focus:outline-none focus:border-primary transition-all placeholder:text-secondary placeholder:uppercase disabled:opacity-50 disabled:cursor-not-allowed" 
+            />
             <Send className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary pointer-events-none" />
           </div>
 
@@ -86,9 +135,26 @@ const Index = () => {
 
           {/* WhatsApp Input */}
           <div className="relative w-full">
-            <input type="tel" value={whatsapp} onChange={e => setWhatsapp(e.target.value)} placeholder="WHATSAPP" className="w-full py-4 px-5 pr-12 text-lg font-body border-[3px] border-secondary rounded-full bg-card focus:outline-none focus:border-primary transition-all placeholder:text-secondary placeholder:uppercase" />
+            <input 
+              type="tel" 
+              value={whatsapp} 
+              onChange={e => setWhatsapp(e.target.value)} 
+              placeholder="WHATSAPP" 
+              maxLength={20}
+              disabled={isSubmitting}
+              className="w-full py-4 px-5 pr-12 text-lg font-body border-[3px] border-secondary rounded-full bg-card focus:outline-none focus:border-primary transition-all placeholder:text-secondary placeholder:uppercase disabled:opacity-50 disabled:cursor-not-allowed" 
+            />
             <Send className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary pointer-events-none" />
           </div>
+
+          {/* Submit Button */}
+          <Button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="w-full py-6 text-lg font-body uppercase rounded-full bg-primary hover:bg-primary-dark text-primary-foreground shadow-button hover:shadow-button-hover transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? "ENVIANDO..." : "ENVIAR →"}
+          </Button>
         </form>
 
         {/* Footer */}
