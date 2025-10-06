@@ -20,7 +20,7 @@ const Index = () => {
   const [whatsapp, setWhatsapp] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Check that at least one field is filled
@@ -52,25 +52,32 @@ const Index = () => {
         }
       }
 
-      // Create email body with validated data
-      let emailBody = "Nueva persona interesada en Poiesis:%0D%0A%0D%0A";
-      if (email.trim()) {
-        emailBody += `Email: ${encodeURIComponent(email.trim())}%0D%0A`;
+      // Prepare form data for Web3Forms
+      const formData = {
+        access_key: 'a216fdbe-9500-4681-af49-9f1643393f2e',
+        subject: 'Poiesis - Nuevo Interesado',
+        from_name: 'Poiesis Website',
+        ...(email.trim() && { email: email.trim() }),
+        ...(whatsapp.trim() && { whatsapp: whatsapp.trim() })
+      };
+
+      // Submit to Web3Forms API
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        // Clear form and show success
+        setEmail("");
+        setWhatsapp("");
+        toast.success("¡Gracias por tu interés! Te contactaremos pronto.");
+      } else {
+        throw new Error('Failed to submit form');
       }
-      if (whatsapp.trim()) {
-        emailBody += `WhatsApp: ${encodeURIComponent(whatsapp.trim())}%0D%0A`;
-      }
-
-      // Create mailto link
-      const mailtoLink = `mailto:byrne.saar@gmail.com?subject=Poiesis - Nuevo Interesado&body=${emailBody}`;
-
-      // Open email client
-      window.location.href = mailtoLink;
-
-      // Clear form and show success
-      setEmail("");
-      setWhatsapp("");
-      toast.success("¡Gracias por tu interés! Se abrirá tu cliente de email.");
       
     } catch (error) {
       toast.error("Ocurrió un error. Por favor, intenta de nuevo.");
