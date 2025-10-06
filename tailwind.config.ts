@@ -50,8 +50,9 @@ export default {
         },
       },
       fontFamily: {
-        display: ['Black Ops One', 'cursive'],
-        body: ['Rubik', 'sans-serif'],
+        display: ['Bungee', 'cursive'],
+        'display-shade': ['Bungee Shade', 'cursive'],
+        body: ['Bungee', 'sans-serif'],
       },
       boxShadow: {
         'card': 'var(--shadow-card)',
